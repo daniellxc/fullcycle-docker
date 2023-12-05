@@ -1,0 +1,15 @@
+FROM golang:1.21-alpine as build
+
+WORKDIR /app
+
+COPY go.mod ./
+RUN go mod download && go mod verify
+
+COPY . .
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -v -o /build/app ./...
+
+FROM scratch
+
+COPY --from=build /build/app /app
+
+CMD ["/app"]
