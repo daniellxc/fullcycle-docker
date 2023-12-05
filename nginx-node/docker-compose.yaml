@@ -4,6 +4,7 @@ services:
   app:
     build:
       context: ./node
+    container_name: app
     tty: true
     volumes:
       - ./node:/usr/src/app
@@ -11,8 +12,11 @@ services:
       - node-network
     ports:
       - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
     
-    
+
 
   db:
     image: mysql:5.7
@@ -27,6 +31,11 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - node-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
 
 
