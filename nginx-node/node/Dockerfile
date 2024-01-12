@@ -2,8 +2,12 @@ FROM node:16
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY package*.json ./
 
 EXPOSE 3000
+
+RUN npm install
+
+COPY . .
 
 CMD [ "node", "index.js" ]
