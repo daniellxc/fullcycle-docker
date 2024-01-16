@@ -5,6 +5,7 @@ services:
     build:
       context: ./node
     container_name: app
+    command: sh -c "npm install --verbose && node index.js"
     tty: true
     volumes:
       - ./node:/usr/src/app
